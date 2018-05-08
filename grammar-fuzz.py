@@ -5,9 +5,65 @@ import random
 import re
 import sys
 import json
+import string
 
 # We define a grammar as mappings of nonterminals into possible expansions.
 # Possible expansions come as a list of alternatives
+
+json_grammar = {
+    "$START":
+        ["$OBJECT", "$ARRAY"],
+
+    "$OBJECT":
+        ["{}", "{$MEMBERS}"],
+
+    "$MEMBERS":
+        ["$PAIR", "$PAIR,$MEMBERS"],
+
+    "$PAIR":
+        ["$STRING:$VALUE"],
+
+    "$ARRAY":
+        ["[]","[$ELEMENTS]"],
+
+    "$ELEMENTS":
+        ["$VALUE", "$VALUE,$ELEMENTS"],
+
+    "$VALUE":
+        ["$STRING", "$NUMBER", "$OBJECT", "$ARRAY", "true", "false", " null"],
+
+    "$STRING":
+        ["\"\"", "\"$CHARS\""],
+    
+    "$CHARS":
+        ["$CHAR", "$CHARS"],
+    
+    "$CHAR":
+       [c for c in string.printable if c not in ["\"", "\\", "$", "\n", "\r", "\v", "\f"]],
+
+    "$NUMBER":
+        ["$INT", "$INT$FRAC", "$INT$EXP", "$INT$FRAC$EXP"],
+
+    "$INT":
+        ["$DIGIT$DIGITS", "-$DIGIT$DIGITS"],
+
+    "$FRAC":
+        [".$DIGITS"],
+
+    "$EXP":
+        ["$E$DIGITS"],
+
+    "$DIGITS":
+        ["$DIGIT$DIGITS", "$DIGIT"],
+
+    "$DIGIT":
+       [c for c in string.digits],
+
+    "$E":
+        ["e", "e+", "e-", "E", "E+", "E-"]
+
+}
+
 term_grammar = {
     "$START":
         ["$EXPR"],
@@ -274,5 +330,10 @@ if __name__ == "__main__":
     # The grammar to use
     js, = [f.read() for f in using(open(sys.argv[1], 'r'))]
     grammar = json.loads(js)
-    symbols, = sys.argv[2:] or [10]
-    print(produce(grammar, int(symbols)))
+    grammar = json_grammar
+    _symbols,*rest = sys.argv[2:] or ['10']
+    symbols = int(_symbols)
+    _count, = rest or [1]
+    count = int(_count)
+    for i in range(count):
+        print(produce(grammar, int(symbols)))
