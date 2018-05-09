@@ -335,5 +335,11 @@ if __name__ == "__main__":
     symbols = int(_symbols)
     _count, = rest or [1]
     count = int(_count)
+    cache = {}
     for i in range(count):
-        print(produce(grammar, int(symbols)))
+        while True:
+            s = produce(grammar, int(symbols))
+            if s not in cache:
+                cache[s] = True
+                print(s)
+                break
