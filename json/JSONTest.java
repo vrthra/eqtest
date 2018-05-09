@@ -15,49 +15,42 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeoutException;
 
 public class JSONTest {
-
   static XJSONArray xjsonObject;
   static JSONArray jsonObject;
-
+  static int MaxSeconds = 5;
   static final ExecutorService executor = Executors.newSingleThreadExecutor();
 
   public static int testJSON(String str) throws Exception {
     jsonObject = null;
     xjsonObject = null;
-
     final Runnable xJsonTask = new Thread() {
       @Override
-      public void run() {
-        xjsonObject = new XJSONArray(str);
-      }
+      public void run() { xjsonObject = new XJSONArray(str); }
     };
-
     final Runnable jsonTask = new Thread() {
       @Override
-      public void run() {
-        jsonObject = new JSONArray(str);
-      }
+      public void run() { jsonObject = new JSONArray(str); }
     };
 
     final Future xjsonFuture = executor.submit(xJsonTask);
     final Future jsonFuture = executor.submit(jsonTask);
-    try { 
-      xjsonFuture.get(5, TimeUnit.SECONDS); 
-    }
-    catch (TimeoutException te) { 
-      return -3;
-    } catch (Exception ex) {
-      	ex.printStackTrace();
-	return -1;
-    }
+    // xjson should not throw exceptions!
+    xjsonFuture.get(MaxSeconds, TimeUnit.SECONDS);
     try {
       jsonFuture.get(5, TimeUnit.SECONDS);
-      return (jsonObject.toString().equals(xjsonObject.toString())) == true ? 1 : 0;
-    } catch (TimeoutException te) { 
+      return jsonObject.toString().equals(xjsonObject.toString()) == true ? 1 : 0;
+    } catch (TimeoutException te) {
       return -2;
     } catch (Exception ex) {
-	ex.printStackTrace();
-      return -1;
+      Throwable th = ex.getCause();
+      if (th instanceof JSONException) {
+        return -1;
+      } else if (th instanceof NullPointerException) {
+        return -1;
+      } else {
+        th.printStackTrace();
+        throw new Exception(th);
+      }
     }
   }
 
@@ -71,23 +64,19 @@ public class JSONTest {
       int count = 0;
       System.out.println(args[1]);
       while ((line = bufferedReader.readLine()) != null) {
+        System.out.println(line);
         int testJsonResult = 0;
-        try {
-          testJsonResult = testJSON("[" + line + "]");
-        } catch (Exception ex) {
-	  ex.printStackTrace();
-          testJsonResult = -1;
-        }
+        testJsonResult = testJSON("[" + line + "]");
         if (testJsonResult == 1) {
           System.out.println("1");
         } else if (testJsonResult == -2) {
           System.out.println("t");
-        } else if (testJsonResult == -3) {
-          System.out.println("T");
         } else if (testJsonResult == -1) {
           System.out.println("-1");
-        } else {
+        } else if (testJsonResult == 0) {
           System.out.println("0");
+        } else {
+          throw new Exception(line + " " + testJsonResult);
         }
         count++;
       }

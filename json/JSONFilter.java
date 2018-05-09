@@ -8,78 +8,49 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
-import java.util.concurrent.*;
-
-import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.Future;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeoutException;
 
 public class JSONFilter {
-
   static XJSONArray xjsonObject;
-
+  static int MaxSeconds = 5;
   static final ExecutorService executor = Executors.newSingleThreadExecutor();
 
   public static int testJSON(String str) throws Exception {
     xjsonObject = null;
-
     final Runnable xJsonTask = new Thread() {
       @Override
-      public void run() {
-        xjsonObject = new XJSONArray(str);
-      }
+      public void run() { xjsonObject = new XJSONArray(str); }
     };
-
     final Future xjsonFuture = executor.submit(xJsonTask);
-    try { 
-      xjsonFuture.get(5, TimeUnit.SECONDS); 
-    }
-    catch (TimeoutException te) { 
-      return -3;
-    } 
-    catch(ExecutionException xe)
-    {
-	Throwable cause = xe.getCause();
-	if (cause instanceof XJSONException)
-	{
-		return -1;
-	}
-      	xe.printStackTrace();
-	return -1;
-    }
-    catch (Exception ex) {
-      	ex.printStackTrace();
-	return -1;
+    try {
+      xjsonFuture.get(MaxSeconds, TimeUnit.SECONDS);
+    } catch (TimeoutException te) {
+      return -1;
+    } catch (Exception ex) {
+      return -2;
     }
     return 0;
   }
 
   public static void main(String[] args) {
     try {
+      Scanner in = new Scanner(System.in);
+      StringBuffer stringBuffer = new StringBuffer();
       String line;
-      Scanner sc = new Scanner(System.in);
-      /*File file = new File();
-      FileReader fileReader = new FileReader(file);
-      BufferedReader bufferedReader = new BufferedReader(fileReader);
-      StringBuffer stringBuffer = new StringBuffer();*/
-      int count = 0;
-      //System.out.println(args[1]);
-      while (sc.hasNextLine()) {
-	 line = sc.nextLine();
-	System.err.println(line);
-        int testJsonResult = 0;
-        try {
-          testJsonResult = testJSON("[" + line + "]");
-        } catch (Exception ex) {
-	  ex.printStackTrace();
-          testJsonResult = -1;
-        }
-        if (testJsonResult < 0) {
-          System.err.println(line);
-        } else {
+      while (in.hasNext()) {
+        line = in.nextLine();
+        int testJsonResult = testJSON("[" + line + "]");
+        if (testJsonResult == 0) {
           System.out.println(line);
+        } else {
+          System.err.println(line);
         }
-        count++;
       }
-      //fileReader.close();
+      if (!executor.isTerminated()) executor.shutdownNow();
     } catch (Exception ex) {
       ex.printStackTrace();
     }

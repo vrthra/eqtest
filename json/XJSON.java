@@ -90,8 +90,8 @@ import java.io.Reader;
  * <code>Number</code>, <code>String</code>, or the
  * <code>XJSONObject.NULL object</code>.
  * <p>
- * The constructor can convert a JSON text into a Java object. The
- * <code>toString</code> method converts to JSON text.
+ * The constructor can convert a XJSON text into a Java object. The
+ * <code>toString</code> method converts to XJSON text.
  * <p>
  * A <code>get</code> method returns a value if one can be found, and throws an
  * exception if one cannot be found. An <code>opt</code> method returns a
@@ -104,7 +104,7 @@ import java.io.Reader;
  * coercion for you.
  * <p>
  * The texts produced by the <code>toString</code> methods strictly conform to
- * JSON syntax rules. The constructors are more forgiving in the texts they will
+ * XJSON syntax rules. The constructors are more forgiving in the texts they will
  * accept:
  * <ul>
  * <li>An extra <code>,</code>&nbsp;<small>(comma)</small> may appear just
@@ -121,7 +121,7 @@ import java.io.Reader;
  * <code>null</code>.</li>
  * </ul>
  *
- * @author JSON.org
+ * @author XJSON.org
  * @version 2016-08/15
  */
 class XJSONArray implements Iterable<Object> {
@@ -192,7 +192,7 @@ class XJSONArray implements Iterable<Object> {
     }
 
     /**
-     * Construct a XJSONArray from a source JSON text.
+     * Construct a XJSONArray from a source XJSON text.
      *
      * @param source
      *            A string that begins with <code>[</code>&nbsp;<small>(left
@@ -445,7 +445,7 @@ class XJSONArray implements Iterable<Object> {
      *             If there is no value for the index. or if the value is not a
      *             XJSONArray
      */
-    public XJSONArray getJSONArray(int index) throws XJSONException {
+    public XJSONArray getXJSONArray(int index) throws XJSONException {
         Object object = this.get(index);
         if (object instanceof XJSONArray) {
             return (XJSONArray) object;
@@ -463,7 +463,7 @@ class XJSONArray implements Iterable<Object> {
      *             If there is no value for the index or if the value is not a
      *             XJSONObject
      */
-    public XJSONObject getJSONObject(int index) throws XJSONException {
+    public XJSONObject getXJSONObject(int index) throws XJSONException {
         Object object = this.get(index);
         if (object instanceof XJSONObject) {
             return (XJSONObject) object;
@@ -517,30 +517,6 @@ class XJSONArray implements Iterable<Object> {
      */
     public boolean isNull(int index) {
         return XJSONObject.NULL.equals(this.opt(index));
-    }
-
-    /**
-     * Make a string from the contents of this XJSONArray. The
-     * <code>separator</code> string is inserted between each element. Warning:
-     * This method assumes that the data structure is acyclical.
-     *
-     * @param separator
-     *            A string that will be inserted between the elements.
-     * @return a string.
-     * @throws XJSONException
-     *             If the array contains an invalid number.
-     */
-    public String join(String separator) throws XJSONException {
-        int len = this.length();
-        StringBuilder sb = new StringBuilder();
-
-        for (int i = 0; i < len; i += 1) {
-            if (i > 0) {
-                sb.append(separator);
-            }
-            sb.append(XJSONObject.valueToString(this.myArrayList.get(i)));
-        }
-        return sb.toString();
     }
 
     /**
@@ -853,7 +829,7 @@ class XJSONArray implements Iterable<Object> {
      * @return A XJSONArray value, or null if the index has no value, or if the
      *         value is not a XJSONArray.
      */
-    public XJSONArray optJSONArray(int index) {
+    public XJSONArray optXJSONArray(int index) {
         Object o = this.opt(index);
         return o instanceof XJSONArray ? (XJSONArray) o : null;
     }
@@ -867,7 +843,7 @@ class XJSONArray implements Iterable<Object> {
      *            The index must be between 0 and length() - 1.
      * @return A XJSONObject value.
      */
-    public XJSONObject optJSONObject(int index) {
+    public XJSONObject optXJSONObject(int index) {
         Object o = this.opt(index);
         return o instanceof XJSONObject ? (XJSONObject) o : null;
     }
@@ -1270,7 +1246,7 @@ class XJSONArray implements Iterable<Object> {
     }
 
     /**
-     * Determine if two JSONArrays are similar.
+     * Determine if two XJSONArrays are similar.
      * They must contain similar sequences.
      *
      * @param other The other XJSONArray
@@ -1320,7 +1296,7 @@ class XJSONArray implements Iterable<Object> {
      * @throws XJSONException
      *             If any of the names are null.
      */
-    public XJSONObject toJSONObject(XJSONArray names) throws XJSONException {
+    public XJSONObject toXJSONObject(XJSONArray names) throws XJSONException {
         if (names == null || names.length() == 0 || this.length() == 0) {
             return null;
         }
@@ -1332,9 +1308,9 @@ class XJSONArray implements Iterable<Object> {
     }
 
     /**
-     * Make a JSON text of this XJSONArray. For compactness, no unnecessary
+     * Make a XJSON text of this XJSONArray. For compactness, no unnecessary
      * whitespace is added. If it is not possible to produce a syntactically
-     * correct JSON text then null will be returned instead. This could occur if
+     * correct XJSON text then null will be returned instead. This could occur if
      * the array contains an invalid number.
      * <p><b>
      * Warning: This method assumes that the data structure is acyclical.
@@ -1353,7 +1329,7 @@ class XJSONArray implements Iterable<Object> {
     }
 
     /**
-     * Make a pretty-printed JSON text of this XJSONArray.
+     * Make a pretty-printed XJSON text of this XJSONArray.
      * 
      * <p>If <code>indentFactor > 0</code> and the {@link XJSONArray} has only
      * one element, then the array will be output on a single line:
@@ -1387,7 +1363,7 @@ class XJSONArray implements Iterable<Object> {
     }
 
     /**
-     * Write the contents of the XJSONArray as JSON text to a writer. For
+     * Write the contents of the XJSONArray as XJSON text to a writer. For
      * compactness, no whitespace is added.
      * <p><b>
      * Warning: This method assumes that the data structure is acyclical.
@@ -1401,7 +1377,7 @@ class XJSONArray implements Iterable<Object> {
     }
 
     /**
-     * Write the contents of the XJSONArray as JSON text to a writer.
+     * Write the contents of the XJSONArray as XJSON text to a writer.
      * 
      * <p>If <code>indentFactor > 0</code> and the {@link XJSONArray} has only
      * one element, then the array will be output on a single line:
@@ -1420,7 +1396,7 @@ class XJSONArray implements Iterable<Object> {
      * </b>
      *
      * @param writer
-     *            Writes the serialized JSON
+     *            Writes the serialized XJSON
      * @param indentFactor
      *            The number of spaces to add to each level of indentation.
      * @param indent
@@ -1500,9 +1476,9 @@ class XJSONArray implements Iterable<Object> {
 }
 
 /**
- * The XJSONException is thrown by the JSON.org classes when things are amiss.
+ * The XJSONException is thrown by the XJSON.org classes when things are amiss.
  *
- * @author JSON.org
+ * @author XJSON.org
  * @version 2015-12-09
  */
 class XJSONException extends RuntimeException {
@@ -1553,10 +1529,10 @@ class XJSONException extends RuntimeException {
  * values by name. The values can be any of these types: <code>Boolean</code>,
  * <code>XJSONArray</code>, <code>XJSONObject</code>, <code>Number</code>,
  * <code>String</code>, or the <code>XJSONObject.NULL</code> object. A
- * XJSONObject constructor can be used to convert an external form JSON text
+ * XJSONObject constructor can be used to convert an external form XJSON text
  * into an internal form whose values can be retrieved with the
  * <code>get</code> and <code>opt</code> methods, or to convert values into a
- * JSON text using the <code>put</code> and <code>toString</code> methods. A
+ * XJSON text using the <code>put</code> and <code>toString</code> methods. A
  * <code>get</code> method returns a value if one can be found, and throws an
  * exception if one cannot be found. An <code>opt</code> method returns a
  * default value instead of throwing an exception, and so is useful for
@@ -1573,13 +1549,13 @@ class XJSONException extends RuntimeException {
  *
  * <pre>
  * myString = new XJSONObject()
- *         .put(&quot;JSON&quot;, &quot;Hello, World!&quot;).toString();
+ *         .put(&quot;XJSON&quot;, &quot;Hello, World!&quot;).toString();
  * </pre>
  *
- * produces the string <code>{"JSON": "Hello, World"}</code>.
+ * produces the string <code>{"XJSON": "Hello, World"}</code>.
  * <p>
  * The texts produced by the <code>toString</code> methods strictly conform to
- * the JSON syntax rules. The constructors are more forgiving in the texts they
+ * the XJSON syntax rules. The constructors are more forgiving in the texts they
  * will accept:
  * <ul>
  * <li>An extra <code>,</code>&nbsp;<small>(comma)</small> may appear just
@@ -1594,7 +1570,7 @@ class XJSONException extends RuntimeException {
  * or <code>null</code>.</li>
  * </ul>
  *
- * @author JSON.org
+ * @author XJSON.org
  * @version 2016-08-15
  */
 class XJSONObject {
@@ -1668,31 +1644,11 @@ class XJSONObject {
     public XJSONObject() {
         // HashMap is used on purpose to ensure that elements are unordered by 
         // the specification.
-        // JSON tends to be a portable transfer format to allows the container 
+        // XJSON tends to be a portable transfer format to allows the container 
         // implementations to rearrange their items for a faster element 
         // retrieval based on associative access.
         // Therefore, an implementation mustn't rely on the order of the item.
         this.map = new HashMap<String, Object>();
-    }
-
-    /**
-     * Construct a XJSONObject from a subset of another XJSONObject. An array of
-     * strings is used to identify the keys that should be copied. Missing keys
-     * are ignored.
-     *
-     * @param jo
-     *            A XJSONObject.
-     * @param names
-     *            An array of strings.
-     */
-    public XJSONObject(XJSONObject jo, String[] names) {
-        this(names.length);
-        for (int i = 0; i < names.length; i += 1) {
-            try {
-                this.putOnce(names[i], jo.opt(names[i]));
-            } catch (Exception ignore) {
-            }
-        }
     }
 
     /**
@@ -1819,7 +1775,7 @@ class XJSONObject {
      * &#64;XJSONPropertyName("FullName")
      * public String getName() { return this.name; }
      * </pre>
-     * The resulting JSON object would contain <code>"FullName": "Larry Fine"</code>
+     * The resulting XJSON object would contain <code>"FullName": "Larry Fine"</code>
      * <p>
      * Similarly, the {@link XJSONPropertyName} annotation can be used on non-
      * <code>get</code> and <code>is</code> methods. We can also override key
@@ -1829,10 +1785,10 @@ class XJSONObject {
      * &#64;XJSONPropertyName("FullName")
      * public String fullName() { return this.name; }
      * </pre>
-     * The resulting JSON object would contain <code>"FullName": "Larry Fine"</code>
+     * The resulting XJSON object would contain <code>"FullName": "Larry Fine"</code>
      * <p>
      * The {@link XJSONPropertyIgnore} annotation can be used to force the bean property
-     * to not be serialized into JSON. If both {@link XJSONPropertyIgnore} and
+     * to not be serialized into XJSON. If both {@link XJSONPropertyIgnore} and
      * {@link XJSONPropertyName} are defined on the same method, a depth comparison is
      * performed and the one closest to the concrete class being serialized is used.
      * If both annotations are at the same level, then the {@link XJSONPropertyIgnore}
@@ -1882,7 +1838,7 @@ class XJSONObject {
     }
 
     /**
-     * Construct a XJSONObject from a source JSON text string. This is the most
+     * Construct a XJSONObject from a source XJSON text string. This is the most
      * commonly used XJSONObject constructor.
      *
      * @param source
@@ -1905,7 +1861,7 @@ class XJSONObject {
      * @param locale
      *            The Locale to load the ResourceBundle for.
      * @throws XJSONException
-     *             If any JSONExceptions are detected.
+     *             If any XJSONExceptions are detected.
      */
     public XJSONObject(String baseName, Locale locale) throws XJSONException {
         this();
@@ -1928,7 +1884,7 @@ class XJSONObject {
                 XJSONObject target = this;
                 for (int i = 0; i < last; i += 1) {
                     String segment = path[i];
-                    XJSONObject nextTarget = target.optJSONObject(segment);
+                    XJSONObject nextTarget = target.optXJSONObject(segment);
                     if (nextTarget == null) {
                         nextTarget = new XJSONObject();
                         target.put(segment, nextTarget);
@@ -2254,7 +2210,7 @@ class XJSONObject {
      * @throws XJSONException
      *             if the key is not found or if the value is not a XJSONArray.
      */
-    public XJSONArray getJSONArray(String key) throws XJSONException {
+    public XJSONArray getXJSONArray(String key) throws XJSONException {
         Object object = this.get(key);
         if (object instanceof XJSONArray) {
             return (XJSONArray) object;
@@ -2272,7 +2228,7 @@ class XJSONObject {
      * @throws XJSONException
      *             if the key is not found or if the value is not a XJSONObject.
      */
-    public XJSONObject getJSONObject(String key) throws XJSONException {
+    public XJSONObject getXJSONObject(String key) throws XJSONException {
         Object object = this.get(key);
         if (object instanceof XJSONObject) {
             return (XJSONObject) object;
@@ -2818,7 +2774,7 @@ class XJSONObject {
      *            A key string.
      * @return A XJSONArray which is the value.
      */
-    public XJSONArray optJSONArray(String key) {
+    public XJSONArray optXJSONArray(String key) {
         Object o = this.opt(key);
         return o instanceof XJSONArray ? (XJSONArray) o : null;
     }
@@ -2831,7 +2787,7 @@ class XJSONObject {
      *            A key string.
      * @return A XJSONObject which is the value.
      */
-    public XJSONObject optJSONObject(String key) {
+    public XJSONObject optXJSONObject(String key) {
         Object object = this.opt(key);
         return object instanceof XJSONObject ? (XJSONObject) object : null;
     }
@@ -3031,7 +2987,7 @@ class XJSONObject {
         }
         // if the first letter in the key is not uppercase, then skip.
         // This is to maintain backwards compatibility before PR406
-        // (https://github.com/stleary/JSON-java/pull/406/)
+        // (https://github.com/stleary/XJSON-java/pull/406/)
         if (Character.isLowerCase(key.charAt(0))) {
             return null;
         }
@@ -3100,9 +3056,6 @@ class XJSONObject {
      * Searches the class hierarchy to see if the method or it's super
      * implementations and interfaces has the annotation. Returns the depth of the
      * annotation in the hierarchy.
-     *
-     * @param <A>
-     *            type of the annotation
      *
      * @param m
      *            method to check
@@ -3353,12 +3306,12 @@ class XJSONObject {
     /**
      * Produce a string in double quotes with backslash sequences in all the
      * right places. A backslash will be inserted within </, producing <\/,
-     * allowing JSON text to be delivered in HTML. In JSON text, a string cannot
+     * allowing XJSON text to be delivered in HTML. In XJSON text, a string cannot
      * contain a control character or an unescaped quote or backslash.
      *
      * @param string
      *            A String
-     * @return A String correctly formatted for insertion in a JSON text.
+     * @return A String correctly formatted for insertion in a XJSON text.
      */
     public static String quote(String string) {
         StringWriter sw = new StringWriter();
@@ -3444,7 +3397,7 @@ class XJSONObject {
     }
 
     /**
-     * Determine if two JSONObjects are similar.
+     * Determine if two XJSONObjects are similar.
      * They must contain the same set of names which must be associated with
      * similar values.
      *
@@ -3568,7 +3521,7 @@ class XJSONObject {
      *
      * @param string
      *            A String.
-     * @return A simple JSON value.
+     * @return A simple XJSON value.
      */
     // Changes to this method must be copied to the corresponding method in
     // the XML class to keep full support for Android
@@ -3629,12 +3582,12 @@ class XJSONObject {
             if (o instanceof Double) {
                 if (((Double) o).isInfinite() || ((Double) o).isNaN()) {
                     throw new XJSONException(
-                            "JSON does not allow non-finite numbers.");
+                            "XJSON does not allow non-finite numbers.");
                 }
             } else if (o instanceof Float) {
                 if (((Float) o).isInfinite() || ((Float) o).isNaN()) {
                     throw new XJSONException(
-                            "JSON does not allow non-finite numbers.");
+                            "XJSON does not allow non-finite numbers.");
                 }
             }
         }
@@ -3651,7 +3604,7 @@ class XJSONObject {
      * @throws XJSONException
      *             If any of the values are non-finite numbers.
      */
-    public XJSONArray toJSONArray(XJSONArray names) throws XJSONException {
+    public XJSONArray toXJSONArray(XJSONArray names) throws XJSONException {
         if (names == null || names.length() == 0) {
             return null;
         }
@@ -3663,8 +3616,8 @@ class XJSONObject {
     }
 
     /**
-     * Make a JSON text of this XJSONObject. For compactness, no whitespace is
-     * added. If this would not result in a syntactically correct JSON text,
+     * Make a XJSON text of this XJSONObject. For compactness, no whitespace is
+     * added. If this would not result in a syntactically correct XJSON text,
      * then null will be returned instead.
      * <p><b>
      * Warning: This method assumes that the data structure is acyclical.
@@ -3685,7 +3638,7 @@ class XJSONObject {
     }
 
     /**
-     * Make a pretty-printed JSON text of this XJSONObject.
+     * Make a pretty-printed XJSON text of this XJSONObject.
      * 
      * <p>If <code>indentFactor > 0</code> and the {@link XJSONObject}
      * has only one key, then the object will be output on a single line:
@@ -3715,38 +3668,6 @@ class XJSONObject {
         synchronized (w.getBuffer()) {
             return this.write(w, indentFactor, 0).toString();
         }
-    }
-
-    /**
-     * Make a JSON text of an Object value. If the object has an
-     * value.toJSONString() method, then that method will be used to produce the
-     * JSON text. The method is required to produce a strictly conforming text.
-     * If the object does not contain a toJSONString method (which is the most
-     * common case), then a text will be produced by other means. If the value
-     * is an array or Collection, then a XJSONArray will be made from it and its
-     * toJSONString method will be called. If the value is a MAP, then a
-     * XJSONObject will be made from it and its toJSONString method will be
-     * called. Otherwise, the value's toString method will be called, and the
-     * result will be quoted.
-     *
-     * <p>
-     * Warning: This method assumes that the data structure is acyclical.
-     *
-     * @param value
-     *            The value to be serialized.
-     * @return a printable, displayable, transmittable representation of the
-     *         object, beginning with <code>{</code>&nbsp;<small>(left
-     *         brace)</small> and ending with <code>}</code>&nbsp;<small>(right
-     *         brace)</small>.
-     * @throws XJSONException
-     *             If the value is or contains an invalid number.
-     */
-    public static String valueToString(Object value) throws XJSONException {
-        // moves the implementation to XJSONWriter as:
-        // 1. It makes more sense to be part of the writer class
-        // 2. For Android support this method is not available. By implementing it in the Writer
-        //    Android users can use the writer with the built in Android XJSONObject implementation.
-        return XJSONWriter.valueToString(value);
     }
 
     /**
@@ -3803,7 +3724,7 @@ class XJSONObject {
     }
 
     /**
-     * Write the contents of the XJSONObject as JSON text to a writer. For
+     * Write the contents of the XJSONObject as XJSON text to a writer. For
      * compactness, no whitespace is added.
      * <p><b>
      * Warning: This method assumes that the data structure is acyclical.
@@ -3823,22 +3744,22 @@ class XJSONObject {
         } else if (value instanceof XJSONString) {
             Object o;
             try {
-                o = ((XJSONString) value).toJSONString();
+                o = ((XJSONString) value).toXJSONString();
             } catch (Exception e) {
                 throw new XJSONException(e);
             }
             writer.write(o != null ? o.toString() : quote(value.toString()));
         } else if (value instanceof Number) {
-            // not all Numbers may match actual JSON Numbers. i.e. fractions or Imaginary
+            // not all Numbers may match actual XJSON Numbers. i.e. fractions or Imaginary
             final String numberAsString = numberToString((Number) value);
             try {
                 // Use the BigDecimal constructor for its parser to validate the format.
                 @SuppressWarnings("unused")
                 BigDecimal testNum = new BigDecimal(numberAsString);
-                // Close enough to a JSON number that we will use it unquoted
+                // Close enough to a XJSON number that we will use it unquoted
                 writer.write(numberAsString);
             } catch (NumberFormatException ex){
-                // The Number value is not a valid JSON number.
+                // The Number value is not a valid XJSON number.
                 // Instead we will quote it as a string
                 quote(numberAsString, writer);
             }
@@ -3871,7 +3792,7 @@ class XJSONObject {
     }
 
     /**
-     * Write the contents of the XJSONObject as JSON text to a writer.
+     * Write the contents of the XJSONObject as XJSON text to a writer.
      * 
      * <p>If <code>indentFactor > 0</code> and the {@link XJSONObject}
      * has only one key, then the object will be output on a single line:
@@ -3888,7 +3809,7 @@ class XJSONObject {
      * </b>
      *
      * @param writer
-     *            Writes the serialized JSON
+     *            Writes the serialized XJSON
      * @param indentFactor
      *            The number of spaces to add to each level of indentation.
      * @param indent
@@ -3999,86 +3920,34 @@ class XJSONObject {
  */
 @interface XJSONPropertyName {
     /**
-     * @return The name of the property as to be used in the JSON Object.
+     * @return The name of the property as to be used in the XJSON Object.
      */
     String value();
 }
 /**
- * The <code>XJSONString</code> interface allows a <code>toJSONString()</code>
+ * The <code>XJSONString</code> interface allows a <code>toXJSONString()</code>
  * method so that a class can change the behavior of
  * <code>XJSONObject.toString()</code>, <code>XJSONArray.toString()</code>,
  * and <code>XJSONWriter.value(</code>Object<code>)</code>. The
- * <code>toJSONString</code> method will be used instead of the default behavior
+ * <code>toXJSONString</code> method will be used instead of the default behavior
  * of using the Object's <code>toString()</code> method and quoting the result.
  */
 interface XJSONString {
     /**
-     * The <code>toJSONString</code> method allows a class to produce its own JSON
+     * The <code>toXJSONString</code> method allows a class to produce its own XJSON
      * serialization.
      *
-     * @return A strictly syntactically correct JSON text.
+     * @return A strictly syntactically correct XJSON text.
      */
-    public String toJSONString();
-}
-
-/**
- * XJSONStringer provides a quick and convenient way of producing JSON text.
- * The texts produced strictly conform to JSON syntax rules. No whitespace is
- * added, so the results are ready for transmission or storage. Each instance of
- * XJSONStringer can produce one JSON text.
- * <p>
- * A XJSONStringer instance provides a <code>value</code> method for appending
- * values to the
- * text, and a <code>key</code>
- * method for adding keys before values in objects. There are <code>array</code>
- * and <code>endArray</code> methods that make and bound array values, and
- * <code>object</code> and <code>endObject</code> methods which make and bound
- * object values. All of these methods return the XJSONWriter instance,
- * permitting cascade style. For example, <pre>
- * myString = new XJSONStringer()
- *     .object()
- *         .key("JSON")
- *         .value("Hello, World!")
- *     .endObject()
- *     .toString();</pre> which produces the string <pre>
- * {"JSON":"Hello, World!"}</pre>
- * <p>
- * The first method called must be <code>array</code> or <code>object</code>.
- * There are no methods for adding commas or colons. XJSONStringer adds them for
- * you. Objects and arrays can be nested up to 20 levels deep.
- * <p>
- * This can sometimes be easier than using a XJSONObject to build a string.
- * @author JSON.org
- * @version 2015-12-09
- */
-class XJSONStringer extends XJSONWriter {
-    /**
-     * Make a fresh XJSONStringer. It can be used to build one JSON text.
-     */
-    public XJSONStringer() {
-        super(new StringWriter());
-    }
-
-    /**
-     * Return the JSON text. This method is used to obtain the product of the
-     * XJSONStringer instance. It will return <code>null</code> if there was a
-     * problem in the construction of the JSON text (such as the calls to
-     * <code>array</code> were not properly balanced with calls to
-     * <code>endArray</code>).
-     * @return The JSON text.
-     */
-    @Override
-    public String toString() {
-        return this.mode == 'd' ? this.writer.toString() : null;
-    }
+    public String toXJSONString();
 }
 
 
 /**
  * A XJSONTokener takes a source string and extracts characters and tokens from
  * it. It is used by the XJSONObject and XJSONArray constructors to parse
- * JSON source strings.
- * @author JSON.org
+ * XJSON source strings.
+ * @author XJSON.org
  * @version 2014-05-03
  */
 class XJSONTokener {
@@ -4342,7 +4211,7 @@ class XJSONTokener {
 
     /**
      * Return the characters up to the next close quote character.
-     * Backslash processing is done. The formal JSON format does not
+     * Backslash processing is done. The formal XJSON format does not
      * allow strings in single quotes, but an implementation is allowed to
      * accept them.
      * @param quote The quoting character, either
@@ -4572,391 +4441,23 @@ class XJSONTokener {
 }
 
 
-/**
- * XJSONWriter provides a quick and convenient way of producing JSON text.
- * The texts produced strictly conform to JSON syntax rules. No whitespace is
- * added, so the results are ready for transmission or storage. Each instance of
- * XJSONWriter can produce one JSON text.
- * <p>
- * A XJSONWriter instance provides a <code>value</code> method for appending
- * values to the
- * text, and a <code>key</code>
- * method for adding keys before values in objects. There are <code>array</code>
- * and <code>endArray</code> methods that make and bound array values, and
- * <code>object</code> and <code>endObject</code> methods which make and bound
- * object values. All of these methods return the XJSONWriter instance,
- * permitting a cascade style. For example, <pre>
- * new XJSONWriter(myWriter)
- *     .object()
- *         .key("JSON")
- *         .value("Hello, World!")
- *     .endObject();</pre> which writes <pre>
- * {"JSON":"Hello, World!"}</pre>
- * <p>
- * The first method called must be <code>array</code> or <code>object</code>.
- * There are no methods for adding commas or colons. XJSONWriter adds them for
- * you. Objects and arrays can be nested up to 200 levels deep.
- * <p>
- * This can sometimes be easier than using a XJSONObject to build a string.
- * @author JSON.org
- * @version 2016-08-08
- */
-class XJSONWriter {
-    private static final int maxdepth = 200;
-
-    /**
-     * The comma flag determines if a comma should be output before the next
-     * value.
-     */
-    private boolean comma;
-
-    /**
-     * The current mode. Values:
-     * 'a' (array),
-     * 'd' (done),
-     * 'i' (initial),
-     * 'k' (key),
-     * 'o' (object).
-     */
-    protected char mode;
-
-    /**
-     * The object/array stack.
-     */
-    private final XJSONObject stack[];
-
-    /**
-     * The stack top index. A value of 0 indicates that the stack is empty.
-     */
-    private int top;
-
-    /**
-     * The writer that will receive the output.
-     */
-    protected Appendable writer;
-
-    /**
-     * Make a fresh XJSONWriter. It can be used to build one JSON text.
-     */
-    public XJSONWriter(Appendable w) {
-        this.comma = false;
-        this.mode = 'i';
-        this.stack = new XJSONObject[maxdepth];
-        this.top = 0;
-        this.writer = w;
+/*public class XJSON {
+    public static String testThis(String jsonStr) {
+        switch (jsonStr.trim().charAt(0)) {
+            case '[':
+                return (new XJSONArray(jsonStr)).toString();
+            case '{':
+                return (new XJSONObject(jsonStr)).toString();
+            default:
+                throw new XJSONException(jsonStr);
+        }
     }
-
-    /**
-     * Append a value.
-     * @param string A string value.
-     * @return this
-     * @throws XJSONException If the value is out of sequence.
-     */
-    private XJSONWriter append(String string) throws XJSONException {
-        if (string == null) {
-            throw new XJSONException("Null pointer");
-        }
-        if (this.mode == 'o' || this.mode == 'a') {
-            try {
-                if (this.comma && this.mode == 'a') {
-                    this.writer.append(',');
-                }
-                this.writer.append(string);
-            } catch (IOException e) {
-                // Android as of API 25 does not support this exception constructor
-                // however we won't worry about it. If an exception is happening here
-                // it will just throw a "Method not found" exception instead.
-                throw new XJSONException(e);
-            }
-            if (this.mode == 'o') {
-                this.mode = 'k';
-            }
-            this.comma = true;
-            return this;
-        }
-        throw new XJSONException("Value out of sequence.");
+    public static void main(String[] args) {
+        testThis("[[]]");
+        testThis("[1,{}]");
+        testThis("[]");
+        testThis("[1,2]");
+        testThis("{}");
+        testThis("{\"a\":1, \"b\":2}");
     }
-
-    /**
-     * Begin appending a new array. All values until the balancing
-     * <code>endArray</code> will be appended to this array. The
-     * <code>endArray</code> method must be called to mark the array's end.
-     * @return this
-     * @throws XJSONException If the nesting is too deep, or if the object is
-     * started in the wrong place (for example as a key or after the end of the
-     * outermost array or object).
-     */
-    public XJSONWriter array() throws XJSONException {
-        if (this.mode == 'i' || this.mode == 'o' || this.mode == 'a') {
-            this.push(null);
-            this.append("[");
-            this.comma = false;
-            return this;
-        }
-        throw new XJSONException("Misplaced array.");
-    }
-
-    /**
-     * End something.
-     * @param m Mode
-     * @param c Closing character
-     * @return this
-     * @throws XJSONException If unbalanced.
-     */
-    private XJSONWriter end(char m, char c) throws XJSONException {
-        if (this.mode != m) {
-            throw new XJSONException(m == 'a'
-                ? "Misplaced endArray."
-                : "Misplaced endObject.");
-        }
-        this.pop(m);
-        try {
-            this.writer.append(c);
-        } catch (IOException e) {
-            // Android as of API 25 does not support this exception constructor
-            // however we won't worry about it. If an exception is happening here
-            // it will just throw a "Method not found" exception instead.
-            throw new XJSONException(e);
-        }
-        this.comma = true;
-        return this;
-    }
-
-    /**
-     * End an array. This method most be called to balance calls to
-     * <code>array</code>.
-     * @return this
-     * @throws XJSONException If incorrectly nested.
-     */
-    public XJSONWriter endArray() throws XJSONException {
-        return this.end('a', ']');
-    }
-
-    /**
-     * End an object. This method most be called to balance calls to
-     * <code>object</code>.
-     * @return this
-     * @throws XJSONException If incorrectly nested.
-     */
-    public XJSONWriter endObject() throws XJSONException {
-        return this.end('k', '}');
-    }
-
-    /**
-     * Append a key. The key will be associated with the next value. In an
-     * object, every value must be preceded by a key.
-     * @param string A key string.
-     * @return this
-     * @throws XJSONException If the key is out of place. For example, keys
-     *  do not belong in arrays or if the key is null.
-     */
-    public XJSONWriter key(String string) throws XJSONException {
-        if (string == null) {
-            throw new XJSONException("Null key.");
-        }
-        if (this.mode == 'k') {
-            try {
-                XJSONObject topObject = this.stack[this.top - 1];
-                // don't use the built in putOnce method to maintain Android support
-                if(topObject.has(string)) {
-                    throw new XJSONException("Duplicate key \"" + string + "\"");
-                }
-                topObject.put(string, true);
-                if (this.comma) {
-                    this.writer.append(',');
-                }
-                this.writer.append(XJSONObject.quote(string));
-                this.writer.append(':');
-                this.comma = false;
-                this.mode = 'o';
-                return this;
-            } catch (IOException e) {
-                // Android as of API 25 does not support this exception constructor
-                // however we won't worry about it. If an exception is happening here
-                // it will just throw a "Method not found" exception instead.
-                throw new XJSONException(e);
-            }
-        }
-        throw new XJSONException("Misplaced key.");
-    }
-
-
-    /**
-     * Begin appending a new object. All keys and values until the balancing
-     * <code>endObject</code> will be appended to this object. The
-     * <code>endObject</code> method must be called to mark the object's end.
-     * @return this
-     * @throws XJSONException If the nesting is too deep, or if the object is
-     * started in the wrong place (for example as a key or after the end of the
-     * outermost array or object).
-     */
-    public XJSONWriter object() throws XJSONException {
-        if (this.mode == 'i') {
-            this.mode = 'o';
-        }
-        if (this.mode == 'o' || this.mode == 'a') {
-            this.append("{");
-            this.push(new XJSONObject());
-            this.comma = false;
-            return this;
-        }
-        throw new XJSONException("Misplaced object.");
-
-    }
-
-
-    /**
-     * Pop an array or object scope.
-     * @param c The scope to close.
-     * @throws XJSONException If nesting is wrong.
-     */
-    private void pop(char c) throws XJSONException {
-        if (this.top <= 0) {
-            throw new XJSONException("Nesting error.");
-        }
-        char m = this.stack[this.top - 1] == null ? 'a' : 'k';
-        if (m != c) {
-            throw new XJSONException("Nesting error.");
-        }
-        this.top -= 1;
-        this.mode = this.top == 0
-            ? 'd'
-            : this.stack[this.top - 1] == null
-            ? 'a'
-            : 'k';
-    }
-
-    /**
-     * Push an array or object scope.
-     * @param jo The scope to open.
-     * @throws XJSONException If nesting is too deep.
-     */
-    private void push(XJSONObject jo) throws XJSONException {
-        if (this.top >= maxdepth) {
-            throw new XJSONException("Nesting too deep.");
-        }
-        this.stack[this.top] = jo;
-        this.mode = jo == null ? 'a' : 'k';
-        this.top += 1;
-    }
-
-    /**
-     * Make a JSON text of an Object value. If the object has an
-     * value.toJSONString() method, then that method will be used to produce the
-     * JSON text. The method is required to produce a strictly conforming text.
-     * If the object does not contain a toJSONString method (which is the most
-     * common case), then a text will be produced by other means. If the value
-     * is an array or Collection, then a XJSONArray will be made from it and its
-     * toJSONString method will be called. If the value is a MAP, then a
-     * XJSONObject will be made from it and its toJSONString method will be
-     * called. Otherwise, the value's toString method will be called, and the
-     * result will be quoted.
-     *
-     * <p>
-     * Warning: This method assumes that the data structure is acyclical.
-     *
-     * @param value
-     *            The value to be serialized.
-     * @return a printable, displayable, transmittable representation of the
-     *         object, beginning with <code>{</code>&nbsp;<small>(left
-     *         brace)</small> and ending with <code>}</code>&nbsp;<small>(right
-     *         brace)</small>.
-     * @throws XJSONException
-     *             If the value is or contains an invalid number.
-     */
-    public static String valueToString(Object value) throws XJSONException {
-        if (value == null || value.equals(null)) {
-            return "null";
-        }
-        if (value instanceof XJSONString) {
-            Object object;
-            try {
-                object = ((XJSONString) value).toJSONString();
-            } catch (Exception e) {
-                throw new XJSONException(e);
-            }
-            if (object instanceof String) {
-                return (String) object;
-            }
-            throw new XJSONException("Bad value from toJSONString: " + object);
-        }
-        if (value instanceof Number) {
-            // not all Numbers may match actual JSON Numbers. i.e. Fractions or Complex
-            final String numberAsString = XJSONObject.numberToString((Number) value);
-            try {
-                // Use the BigDecimal constructor for it's parser to validate the format.
-                @SuppressWarnings("unused")
-                BigDecimal unused = new BigDecimal(numberAsString);
-                // Close enough to a JSON number that we will return it unquoted
-                return numberAsString;
-            } catch (NumberFormatException ex){
-                // The Number value is not a valid JSON number.
-                // Instead we will quote it as a string
-                return XJSONObject.quote(numberAsString);
-            }
-        }
-        if (value instanceof Boolean || value instanceof XJSONObject
-                || value instanceof XJSONArray) {
-            return value.toString();
-        }
-        if (value instanceof Map) {
-            Map<?, ?> map = (Map<?, ?>) value;
-            return new XJSONObject(map).toString();
-        }
-        if (value instanceof Collection) {
-            Collection<?> coll = (Collection<?>) value;
-            return new XJSONArray(coll).toString();
-        }
-        if (value.getClass().isArray()) {
-            return new XJSONArray(value).toString();
-        }
-        if(value instanceof Enum<?>){
-            return XJSONObject.quote(((Enum<?>)value).name());
-        }
-        return XJSONObject.quote(value.toString());
-    }
-
-    /**
-     * Append either the value <code>true</code> or the value
-     * <code>false</code>.
-     * @param b A boolean.
-     * @return this
-     * @throws XJSONException
-     */
-    public XJSONWriter value(boolean b) throws XJSONException {
-        return this.append(b ? "true" : "false");
-    }
-
-    /**
-     * Append a double value.
-     * @param d A double.
-     * @return this
-     * @throws XJSONException If the number is not finite.
-     */
-    public XJSONWriter value(double d) throws XJSONException {
-        return this.value(new Double(d));
-    }
-
-    /**
-     * Append a long value.
-     * @param l A long.
-     * @return this
-     * @throws XJSONException
-     */
-    public XJSONWriter value(long l) throws XJSONException {
-        return this.append(Long.toString(l));
-    }
-
-
-    /**
-     * Append an object value.
-     * @param object The object to append. It can be null, or a Boolean, Number,
-     *   String, XJSONObject, or XJSONArray, or an object that implements XJSONString.
-     * @return this
-     * @throws XJSONException If the value is out of sequence.
-     */
-    public XJSONWriter value(Object object) throws XJSONException {
-        return this.append(valueToString(object));
-    }
-}
-
+}*/
