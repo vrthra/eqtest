@@ -1,5 +1,5 @@
 m=1
-t=../test10000.txt
+t=../log
 run:
 	java -cp .:mutants/$(m) org.json.JSONTest $(t)  $(m)
 

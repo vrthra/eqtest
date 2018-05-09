@@ -47,7 +47,8 @@ public class JSONTest {
     catch (TimeoutException te) { 
       return -3;
     } catch (Exception ex) {
-      return -1;
+      	ex.printStackTrace();
+	return -1;
     }
     try {
       jsonFuture.get(5, TimeUnit.SECONDS);
@@ -55,6 +56,7 @@ public class JSONTest {
     } catch (TimeoutException te) { 
       return -2;
     } catch (Exception ex) {
+	ex.printStackTrace();
       return -1;
     }
   }
@@ -73,6 +75,7 @@ public class JSONTest {
         try {
           testJsonResult = testJSON("[" + line + "]");
         } catch (Exception ex) {
+	  ex.printStackTrace();
           testJsonResult = -1;
         }
         if (testJsonResult == 1) {
