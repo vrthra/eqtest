@@ -328,10 +328,10 @@ def using(fn):
 
 if __name__ == "__main__":
     # The grammar to use
-    js, = [f.read() for f in using(open(sys.argv[1], 'r'))]
-    grammar = json.loads(js)
+    #js, = [f.read() for f in using(open(sys.argv[1], 'r'))]
+    #grammar = json.loads(js)
     grammar = json_grammar
-    _symbols,*rest = sys.argv[2:] or ['10']
+    _symbols,*rest = sys.argv[1:] or ['10']
     symbols = int(_symbols)
     _count, = rest or [1]
     count = int(_count)
